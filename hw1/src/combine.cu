@@ -236,7 +236,7 @@ __global__ void mapKernel(
     // 5. Calculate the position of element in out_array according to out_index and out_strides
     int out_pos = index_to_position(out_index, out_shape, shape_size);
     // 6. Apply the unary function to the input element and write the output to the out memory
-    out[out_pos] = fn(fn_id, in_storage(in_pos));
+    out[out_pos] = fn(fn_id, in_storage[in_pos]);
     
     // assert(false && "Not Implemented");
     /// END ASSIGN2_1
