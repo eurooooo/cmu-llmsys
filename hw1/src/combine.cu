@@ -294,6 +294,19 @@ __global__ void zipKernel(
     int a_index[MAX_DIMS];
     int b_index[MAX_DIMS];
 
+    int pos = blockIdx.x * blockDim.x + threadIdx.x;
+    if (pos >= out_size) return;
+
+    to_index(pos, out_shape, out_index, out_shape_size);
+    broadcast_index(out_index, out_shape, a_shape, a_index, out_shape_size, a_shape_size);
+    broadcast_index(out_index, out_shape, b_shape, b_index, out_shape_size, b_shape_size);
+
+    int out_pos = index_to_position(out_index, out_strides, out_shape_size);
+    int a_pos = index_to_position(a_index, a_strides, a_shape_size);
+    int b_pos = index_to_position(b_index, b_strides, b_shape_size);
+
+    out[out_pos] = fn(fn_id, a_storage[a_pos], b_storage[b_pos]);
+
     /// BEGIN ASSIGN2_2
     /// TODO
     // Hints:
